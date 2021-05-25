@@ -148,8 +148,8 @@ We then measure the access times to `the_array[i * PAGE_SIZE]` for
 Accessing `the_array[78 * PAGE_SIZE]` should be faster than the others since it is 
 a cache hit.  
 
-Therefore, by measuring those timings we can deduce the value of `baby_array[48]` 
-and which is the first byte of the flag. 
+Doing so we can deduce the value of `baby_array[48]` 
+which is the first byte of the flag. 
 Repeating this `FLAG_SIZE` times we leak the whole flag. 
 
 ## Cross process Spectre attack
