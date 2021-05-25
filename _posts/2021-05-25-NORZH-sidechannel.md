@@ -12,7 +12,7 @@ image:
 ---
  
 S1de Ch4nnel was a challenge at [NorzhCTF 2021](https://ctftime.org/event/1301).
-Here is the description of the challenge: 
+
 ![](/assets/img/norzh_sidechannel/challenge_description.png)
 
 You can download the challenge [here](/assets/files/NORZH/challenge.tar.gz) and my commented solution 
