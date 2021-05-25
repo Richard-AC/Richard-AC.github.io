@@ -142,6 +142,7 @@ ask the program to access `the_array[baby_array[48] * PAGE_SIZE]`.
 Remember that `baby_array[48]` is the first byte of the flag.
 Let's say it's an 'N' which is ascii 78, this means that the page 78 of `the_array` will
 be placed in cache.
+
 We then measure the access times to `the_array[i * PAGE_SIZE]` for 
 `i` between 0 and 255.
 Accessing `the_array[78 * PAGE_SIZE]` should be faster than the others since it is 
