@@ -21,7 +21,7 @@ You can download the challenge [here](/assets/files/NORZH/challenge.tar.gz) and 
 ## Challenge presentation
 ---
 
-When we ssh into the machine we are presented a binary `chall` and the corresponding code `main.c`:
+When we ssh into the machine we are given a binary `chall` and the corresponding code `main.c`:
 
 ```c
 #include <stdio.h>
