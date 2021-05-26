@@ -270,7 +270,6 @@ char leak_char(int index){
 
 int main(int argc, char *const argv[]) {
 
-    nice(1); // Give a higher priority to the attacker process.
     char leaked_flag [FLAG_SIZE + 1] = {0};
 
         the_array = (const char *) (map_file("./chall") + OFFSET_TO_THE_ARRAY);
