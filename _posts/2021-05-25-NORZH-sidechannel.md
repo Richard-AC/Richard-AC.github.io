@@ -272,7 +272,7 @@ int main(int argc, char *const argv[]) {
 
     char leaked_flag [FLAG_SIZE + 1] = {0};
 
-        the_array = (const char *) (map_file("./chall") + OFFSET_TO_THE_ARRAY);
+    the_array = (const char *) (map_file("./chall") + OFFSET_TO_THE_ARRAY);
 
     for(int i = 0; i < FLAG_SIZE; i++){
         leaked_flag [i] = leak_char(i + 48);
