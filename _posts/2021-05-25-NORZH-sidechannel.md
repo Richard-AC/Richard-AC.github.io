@@ -1,5 +1,5 @@
 ---
-title: CTF WriteUp - NorzhCTF - S1de Ch4nnel
+title: CTF Writeup - NorzhCTF - S1de Ch4nnel
 author: Richard
 date: 2021-05-25 11:33:00 +0000
 categories: [Exploit development]
