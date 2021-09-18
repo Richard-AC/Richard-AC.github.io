@@ -11,8 +11,8 @@ image:
 ## Introduction
 ---
 
-Here are some notes about harnessing and fuzzing a closed source Windows program. 
-Doing so, I found my first zero-days vulnerabilities and got paid my first bounty out of it.
+This article describe how I harnessed and fuzzed a closed-source Windows program. 
+Doing so, I found my first zero-days and got paid my first bounty ever!
 
 ## Target selection
 ---
@@ -20,21 +20,23 @@ Doing so, I found my first zero-days vulnerabilities and got paid my first bount
 To select a target I scrolled through the [ZDI advisories page](https://www.zerodayinitiative.com/advisories/published/) 
 looking for softwares where vulnerabilities had recently been found.
 This strategy has two advantages:
-- If multiple bugs where recently discovered in a program, there are likely more to be found.
+- If multiple bugs were recently discovered in a program, there are likely more to be found.
 - The ZDI is probably interested in the products in this list so there is a good chance they will acquire the bugs you find. 
 
-I ended up going with [OpenText Brava! Desktop](https://www.opentext.com/products-and-solutions/products/enterprise-content-management/opentext-brava/opentext-brava-for-desktop?utm_source=content-centric-applications-opentext-brava-opentext-brava-for-desktop&utm_medium=redirect).
+I ended up going with [OpenText Brava! Desktop](https://www.opentext.com/products-and-solutions/products/enterprise-content-management/opentext-brava/opentext-brava-for-desktop?utm_source=content-centric-applications-opentext-brava-opentext-brava-for-desktop&utm_medium=redirect)
 whose trial version can be downloaded [here](https://www.opentext.com/info/brava-universal-file-viewer?utm_source=opentext-brava-free-trial-download&utm_medium=redirect).
 This is a file viewer that can parse more than [150 different file formats](https://www.opentext.com/file_source/OpenText/en_US/PDF/opentext-brava-desktop-supported-formats-en.pdf) and is all written in C++. A recipe for disaster.
 
-Taking inspiration from the other bugs recently found I decided to focus on the CAD file formats parsing ([.dwg](https://en.wikipedia.org/wiki/.dwg), [.dwf](https://en.wikipedia.org/wiki/Design_Web_Format), etc.).
-To do so we need to isolate the file parsing functionality of the program 
+Taking inspiration from the other bugs recently found I decided to focus on CAD file formats parsing ([.dwg](https://en.wikipedia.org/wiki/.dwg), [.dwf](https://en.wikipedia.org/wiki/Design_Web_Format), etc.).
+To do so we need to isolate the file parsing functionality of the program.
 
 ## Writing the harness
 ---
 
-The first step is to look at how the program behaves in normal circonstances when opening a .dwg file. 
-To do so, attach WinDBG to the running program and open an example file.  
+Our goal is to write a harness which is a piece of code that isolates and exercises a specific part of the software we want to test (in our case, CAD files parsing).
+
+The first step is to look at how the program behaves in normal circonstances when opening a CAD file. 
+To do so, let's attach WinDbg to the running program and open an example file.  
 Here are some useful commands to monitor the program's behaviour.
 
 - [.logopen](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/-logopen--open-log-file-) / [.logclose](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/-logclose--close-log-file-) : 
@@ -42,16 +44,16 @@ Log the debugging session to a file for later analysis.
 - [sxe ld](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/sx--sxd--sxe--sxi--sxn--sxr--sx---set-exceptions-) : Break whenever a module (.dll) is loaded.
 - [bm modulename!\*](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/bp--bu--bm--set-breakpoint-) : Put a breakpoint on every function exported by the module "modulename".
 
+![brava](/assets/img/brava/windbg_sxn_ld.png)
+_Using the command "sxn ld" before opening an example file show the different DLLs that get loaded in the process._
+
 With a combination of this and some static analysis, I was able to reconstruct the different steps taken by the program to open a CAD file. 
 
-![brava](/assets/img/brava/windbg_sxn_ld.png)
-_Using the command "sxn ld" before opening an example file show the different DLL that get loaded in the process._
-
 The main difficulty in writing the harness was deciding where to start replicating the program behaviour. 
-Indeed there are many levels of abstraction between the main binary and the parsing module each implemented in a DLL.
+Indeed there are many levels of abstraction between the main binary and the parsing module each implemented in a DLL:
 ``` BravaDesktop.exe --> Brava3DX.dll --> 3dapi.dll --> 3DInterface.dll --> myr3dkernel.dll --> myrdwgloader.dll --> myrdwgparser.dll```.
 Obviously we don't want to reimplement the whole program. But at the same time, if we only reimplement the later parts we might be missing a lot of initialization and 
-global state that are needed that are needed.
+global state that are required later on. 
 
 My initial intuition was to wait until the file got mapped into memory and only reproduce the behaviour of the program after that point
 However doing so didn't work as getting in so late into the program's logic means that we miss a lot of initialization. 
@@ -59,8 +61,7 @@ Having to manually initialize all the relevant classes/global state after the fa
 
 After some trial and error, I found that myr3dkernel.dll didn't rely on too many objects instantiated in higher layers and thus constitutes a good entry point for the harness.
 
-Following are the notes I took about the different function calls made by the program when opening a CAD file.
-All of these are exported by `myr3dkernel.dll`.
+Following are the notes I took about the different function of `myr3dkernel.dll` that get called by the program when opening a CAD file.
 
 ```
 C3DMManager::C3DMManager(this) // Class constructor
@@ -105,8 +106,9 @@ typedef struct {
 ```
 
 One issue I encountered was that the functions which take a `CBasicString` as argument try to free it after they're done with it.
-The problem is that I manually allocate these structs with `malloc` and when the program calls 
-My workaround was to directly patch the `free_CBasicString` in the DLL and replace its first opcode with 0xC3 (the opcode for `ret` in x86).
+The problem is that I manually allocate these structs with `malloc` and when the program tries to free them it detects memory corruption for some reason
+(I guess mixing `malloc` with `delete` leads to some weird behaviour). 
+My workaround was to patch the `free_CBasicString` in the DLL and replace its first opcode with 0xC3 (the opcode for `ret` in x86).
 This causes the function to immediately return without trying to free anything. I can then free the memory myself in the harness.
 
 ![brava](/assets/img/brava/before_after.png)
