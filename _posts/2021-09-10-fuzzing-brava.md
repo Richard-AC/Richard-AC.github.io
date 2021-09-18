@@ -173,5 +173,6 @@ I will update this part with the detailed analysis once the bugs get patched.
 
 ## Reporting the bugs
 ---
+
 ![brava](/assets/img/brava/ZDI_tracking_number.png)
 
