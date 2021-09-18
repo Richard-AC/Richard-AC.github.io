@@ -11,8 +11,8 @@ image:
 ## Introduction
 ---
 
-This article describe how I harnessed and fuzzed a closed-source Windows program. 
-Doing so, I found my first zero-days and got paid my first bounty ever!
+This article describes how I harnessed and fuzzed a closed-source Windows program. 
+Doing so, I found a few zero-days and got paid my first bounty ever!
 
 ## Target selection
 ---
