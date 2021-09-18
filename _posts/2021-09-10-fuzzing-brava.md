@@ -59,7 +59,7 @@ My initial intuition was to wait until the file got mapped into memory and only 
 However doing so didn't work as getting in so late into the program's logic means that we miss a lot of initialization. 
 Having to manually initialize all the relevant classes/global state after the fact was clearly too tedious.
 
-After some trial and error, I found that myr3dkernel.dll didn't rely on too many objects instantiated in higher layers and thus constitutes a good entry point for the harness.
+After some trial and error, I found that `myr3dkernel.dll` doesn't rely on too many objects instantiated in higher layers and thus constitutes a good entry point for the harness.
 
 Following are the notes I took about the different function of `myr3dkernel.dll` that get called by the program when opening a CAD file.
 
@@ -126,7 +126,7 @@ HMODULE myr3dkernel = LoadLibraryA("myr3dkernel.dll");
 C3DMManager_ctor = (C3DMManager_ctor_t)GetProcAddress(myr3dkernel, "??0C3DMManager@@QAE@XZ");
 // Allocate size for the instance of the class
 C3DMManager_t* C3DMManager = (C3DMManager_t*)malloc(sizeof(C3DMManager_t));
-// Call the constructor. x86 C++ using the thiscall calling convention where a pointer to the instance of the class is passed in ECX.
+// Call the constructor. x86 C++ uses the thiscall calling convention where a pointer to the instance of the class is passed in ECX.
 __asm { MOV ECX, C3DMManager};
 C3DMManager_ctor();
 ```
@@ -145,8 +145,8 @@ And I looked at the coverage using:
 ``` 
 C:\DynamoRIO\bin32\drrun.exe -t drcov -- C:\winafl\build32\bin\Release\opentext_harness.exe E:\example.dwg
 ```
-This command outputs a trace file which can be loaded into IDA Pro using a the [Lighthouse](https://github.com/gaasedelen/lighthouse) plug-in. 
-To visualize coverage and make sure that our harness is exercising the parsing code correctly.
+This command outputs a trace file which can be loaded into IDA Pro using the [Lighthouse](https://github.com/gaasedelen/lighthouse) plug-in 
+to visualize coverage and make sure that our harness is exercising the parsing code correctly.
 
 ![brava](/assets/img/brava/coverage_lighthouse.png)
 _Coverage of each function in myrdwgparser.dll when the harness is run with an example dwg file_
@@ -172,7 +172,7 @@ After having accumulated thousands of crashes, manually reviewing every single o
 Furthermore, even though winafl is supposed to only record "unique" crashes, in my experience, it does save a lot of input files that trigger the same bug.
 
 To assist in the crash triaging, I wrote a custom debugger whose goal is to run the crashing inputs and generate a hash that uniquely identifies a given bug. 
-While not perfect in isolating unique bugs, it has helped cut down the amount of manual work significantly (turning ~1000 unique crashes reported by winafl into ~50 different hashes).
+While not perfect in isolating unique bugs, it has helped cut down the amount of manual work significantly (turning ~1000 "unique" crashes reported by winafl into ~50 different hashes).
 This is a generic tool that is not tied to this particular target so I won't detail it here but here is [a link to the github project](https://github.com/Richard-AC/TriageTool) for more information.
 
 ## Root cause analysis
