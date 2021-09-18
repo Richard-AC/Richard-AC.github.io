@@ -1,5 +1,5 @@
 ---
-title: Fuzzing windows closed source programs
+title: Fuzzing Closed-Source Windows Programs
 author: RAC
 date: 2021-09-17 11:33:00 +0000
 categories: [Vulnerability Research]
@@ -45,7 +45,7 @@ Log the debugging session to a file for later analysis.
 With a combination of this and some static analysis, I was able to reconstruct the different steps taken by the program to open a CAD file. 
 
 ![brava](/assets/img/brava/windbg_sxn_ld.png)
-_Using the command "sxn ld" before opening an example file show us the different DLL that get loaded in the process._
+_Using the command "sxn ld" before opening an example file show the different DLL that get loaded in the process._
 
 The main difficulty in writing the harness was deciding where to start replicating the program behaviour. 
 Indeed there are many levels of abstraction between the main binary and the parsing module each implemented in a DLL.
@@ -104,6 +104,14 @@ typedef struct {
 } CBasicString_t;
 ```
 
+One issue I encountered was that the functions which take a `CBasicString` as argument try to free it after they're done with it.
+The problem is that I manually allocate these structs with `malloc` and when the program calls 
+My workaround was to directly patch the `free_CBasicString` in the DLL and replace its first opcode with 0xC3 (the opcode for `ret` in x86).
+This causes the function to immediately return without trying to free anything. I can then free the memory myself in the harness.
+
+![brava](/assets/img/brava/before_after.png)
+_free_CBasicString before (left) and after (right) the patch_
+
 Now we need to reimplement this logic in our harness.
 Note that when declaring instances of a class defined in a DLL we need to allocate space for it and then manually import and call its constructor. 
 [This article](https://www.codeproject.com/Articles/9405/Using-classes-exported-from-a-DLL-using-LoadLibrar) gives a great explaination of the process.
@@ -121,7 +129,7 @@ __asm { MOV ECX, C3DMManager};
 C3DMManager_ctor();
 ```
 
-The full harness can be found [here](_github_harness_link).
+The full harness can be found [here](https://github.com/Richard-AC).
 
 ## Fuzzing
 ---
@@ -163,7 +171,7 @@ Furthermore, even though winafl is supposed to only record "unique" crashes, in 
 
 To assist in the crash triaging, I wrote a custom debugger whose goal is to run the crashing inputs and generate a hash that uniquely identifies a given bug. 
 While not perfect in isolating unique bugs, it has helped cut down the amount of manual work significantly (turning ~1000 unique crashes reported by winafl into ~50 different hashes).
-This is a generic tool that is not tied to this particular target so I won't detail it here but here is [a link to the github project](link) for more information.
+This is a generic tool that is not tied to this particular target so I won't detail it here but here is [a link to the github project](https://github.com/Richard-AC/TriageTool) for more information.
 
 ## Root cause analysis
 ---
