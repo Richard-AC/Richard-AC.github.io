@@ -1,6 +1,6 @@
 ---
 title: CTF Writeup - NorzhCTF - S1de Ch4nnel
-author: Richard
+author: RAC
 date: 2021-05-25 11:33:00 +0000
 categories: [Exploit development]
 tags: [CTF, WriteUp, Side Channel, Spectre]

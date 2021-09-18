@@ -1,7 +1,7 @@
 ---
 title: Fuzzing windows closed source programs
-author: Richard
-date: 2021-09-18 11:33:00 +0000
+author: RAC
+date: 2021-09-17 11:33:00 +0000
 categories: [Vulnerability Research]
 tags: [Vulnerability Research, Fuzzing, Windows]
 math: true
@@ -43,6 +43,9 @@ Log the debugging session to a file for later analysis.
 - [bm modulename!\*](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/bp--bu--bm--set-breakpoint-) : Put a breakpoint on every function exported by the module "modulename".
 
 With a combination of this and some static analysis, I was able to reconstruct the different steps taken by the program to open a CAD file. 
+
+![brava](/assets/img/brava/windbg_sxn_ld.png)
+_Using the command "sxn ld" before opening an example file show us the different DLL that get loaded in the process._
 
 The main difficulty in writing the harness was deciding where to start replicating the program behaviour. 
 Indeed there are many levels of abstraction between the main binary and the parsing module each implemented in a DLL.
@@ -165,10 +168,10 @@ This is a generic tool that is not tied to this particular target so I won't det
 ## Root cause analysis
 ---
 
-Since the bugs I reported are not yet been patched, I won't disclose any detail here for now.
+Since the bugs I reported have not yet been patched, I won't disclose any detail here for now.
 I will update this part with the detailed analysis once the bugs get patched.
 
-## Reporting the bug
+## Reporting the bugs
 ---
 ![brava](/assets/img/brava/ZDI_tracking_number.png)
 
