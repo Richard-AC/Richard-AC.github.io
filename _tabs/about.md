@@ -28,4 +28,4 @@ order: 4
 
 ## Contact
 
-Feel free to contact me at [0xrac@protonmail.com](0xrac@protonmail.com) or on Discord at **rac#2505**
+Feel free to contact me at <0xrac@protonmail.com> or on Discord at **rac#2505**
