@@ -10,5 +10,22 @@ order: 4
 # MIT License
 ---
 
+## Interests
 
-> **Note**: Add Markdown syntax content to file `_tabs/about.md` and it will show up on this page.
+- Vulnerability Research
+- Fuzzing 
+- Exploit development
+- Hypervisor development
+- Windows Internals
+
+## CTF Results
+
+- 10th - FCSC 2022
+- 1st - ImperialCTF 2022 (with [SHRECS](https://shrecs.fr/))
+- 1st - THCon 2022 (with [SHRECS](https://shrecs.fr/))
+- 1st - Orange CTF2022 (with [SHRECS](https://shrecs.fr/))
+- 4th CSAW 2021 Finals / 9th CSAW 2021 Quals (with [SHRECS](https://shrecs.fr/))
+
+## Contact
+
+Feel free to contact me at [0xrac@protonmail.com](0xrac@protonmail.com) or on Discord at **rac#2505**

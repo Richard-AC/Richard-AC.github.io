@@ -9,7 +9,7 @@
 # --------------------------
 title: RAC Blog                         # the main title
 
-tagline: Exploit development, Malware Analysis and Penetration Testing # it will display as the sub-title
+tagline: Exploit Development, Vulnerability Research and Systems Programming # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   A minimal, portfolio, sidebar,
@@ -31,7 +31,7 @@ twitter:
 
 social:
   name: Richard AC                  # it will shows as the copyright owner in Footer
-  email: example@doamin.com             # change to your email address
+  email: 0xrac@protonmail.com             # change to your email address
   links:
     # The first element serves as the copyright owner's link
     - https://twitter.com/username      # change to your twitter homepage
