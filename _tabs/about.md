@@ -20,6 +20,7 @@ order: 5
 
 ## CTF Results
 
+- 1st - FCSC 2023 in Reverse Engineering (2000 entrants)
 - 10th - FCSC 2022
 - 1st - ImperialCTF 2022 (with [SHRECS](https://shrecs.fr/))
 - 1st - THCon 2022 (with [SHRECS](https://shrecs.fr/))
